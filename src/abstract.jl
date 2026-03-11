@@ -35,7 +35,7 @@ Abstract supertype for $(what).\n
     end
 end
 
-# EngTherm root abstract type
+# ThermoAmounts root abstract type
 mkNonPAbs(:AbstractTherm   , :Any          , "thermodynamic entities"                         )
 
 # BASE branch
