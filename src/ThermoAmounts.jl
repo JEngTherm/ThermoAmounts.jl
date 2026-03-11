@@ -4,4 +4,7 @@ module ThermoAmounts
 using Reexport
 @reexport using Unitful
 
+# Includes - abstract supertypes
+include("abstract.jl")
+
 end
