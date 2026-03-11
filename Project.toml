@@ -1,0 +1,13 @@
+name = "ThermoAmounts"
+uuid = "30559f5f-73c9-4e50-b65c-88552a5db733"
+authors = ["C. Naaktgeboren"]
+version = "0.1.0"
+
+[compat]
+julia = "1.12"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
