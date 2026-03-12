@@ -3,8 +3,12 @@ module ThermoAmounts
 # Imports
 using Reexport
 @reexport using Unitful
+@reexport using Preferences
 
-# Includes - abstract supertypes
+# Abstract supertypes
 include("abstract.jl")
+
+# Preferences
+include("preferences.jl")
 
 end
