@@ -24,6 +24,7 @@ function mkNonPAbs(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool = true
     dcStr = """
     `abstract type $(TY) <: $(TP) end`\n
     Abstract supertype for $(what).\n
+    Exported.\n
     ## Hierarchy\n
     `$(TY) <: $(hiStr)`
         """
@@ -53,13 +54,15 @@ mkNonPAbs(:DT, :ExtBase, "the Time Derivative (rate) base")
 
 """
 `const PREC = Base.IEEEFloat`\n
-Concrete precision type union for parametric abstract types.
+Concrete precision type union for parametric abstract types.\n
+Exported.
 """
 const PREC = Base.IEEEFloat
 
 """
 `const BASE = Union{MA, MO, SY, DT}`\n
-Concrete base type union for parametric abstract types.
+Concrete base type union for parametric abstract types.\n
+Exported.
 """
 const BASE = Union{MA, MO, SY, DT}
 
