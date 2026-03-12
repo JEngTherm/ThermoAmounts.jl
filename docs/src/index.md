@@ -2,13 +2,20 @@
 CurrentModule = ThermoAmounts
 ```
 
+```@contents
+```
+
 # ThermoAmounts
 
 Documentation for [ThermoAmounts](https://github.com/cnaak/ThermoAmounts.jl).
 
-```@index
-```
-
 ```@autodocs
 Modules = [ThermoAmounts]
+Order   = [:module, :constant, :type, :function, :macro]
+Pages   = ["abstract.jl", ]
+```
+
+## Index
+
+```@index
 ```
