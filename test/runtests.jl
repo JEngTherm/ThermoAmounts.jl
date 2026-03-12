@@ -1,5 +1,8 @@
 using Test, Documenter, ThermoAmounts
 
-@testset "ThermoAmounts.jl" begin
-    # Write your tests here.
+include("abstract.test.jl")
+
+# DocTests
+@testset "DocTests for ThermoAmounts                                              " begin
+    doctest(ThermoAmounts; manual = false)
 end
