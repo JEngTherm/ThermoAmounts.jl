@@ -24,10 +24,10 @@ function mkNonPAbs(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool = true
     dcStr = """
     `abstract type $(TY) <: $(TP) end`\n
     Abstract supertype for $(what).\n
-    Exported.\n
+    $(xp ? "Exported\n" : "Not exported\n")
     ## Hierarchy\n
     `$(TY) <: $(hiStr)`
-        """
+    """
     return @eval begin
         # Abstract type definition
         abstract type $TY <: $TP end
@@ -67,3 +67,41 @@ Exported.
 const BASE = Union{MA, MO, SY, DT}
 
 export PREC, BASE
+
+"""
+`function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, pp::Integer=1,
+xp::Bool=true)`\n
+Declares a new, 1-parameter abstract type. Parent type parameter count is a function of `pp`, so
+that declarations are as follows:\n
+- `TY{PTYP} <: TP{PTYP}` for `pp >= 1` (default);
+- `TY{PTYP<:PREC} <: TP` for `pp <= 0`.\n
+Argument `what` is inserted in the new type documentation, and `xp` controls whether or not the
+new abstract type is exported (default `true`).
+"""
+function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
+                   pp::Integer=1, xp::Bool=true)
+    #if !(eval(TP) isa DataType)
+    #    error("Type parent must be a DataType. Got $(string(TP)).")
+    #end
+    hiStr = tyArchy(eval(TP))
+    ppStr = pp>=1 ? "{PTYP}" : ""
+    dcStr = """
+    `abstract type $(TY){PTYP<:PREC} <: $(TP)$(ppStr) end`\n
+    Abstract supertype for $(what).\n
+    $(xp ? "Exported\n" : "Not exported\n")
+    ## Hierarchy\n
+    `$(TY) <: $(hiStr)`
+    """
+    if      pp>=1   @eval (abstract type $TY{PTYP} <: $TP{PTYP} end)
+    elseif  pp<=0   @eval (abstract type $TY{PTYP<:PREC} <: $TP end)
+    end
+    @eval begin
+        # Type documentation
+        @doc $dcStr $TY
+        # Type exporting
+        if $(xp); export $TY; end
+    end
+end
+
+
+
