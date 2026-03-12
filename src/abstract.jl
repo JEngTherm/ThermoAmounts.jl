@@ -58,7 +58,7 @@ Concrete precision type union for parametric abstract types.
 const PREC = Base.IEEEFloat
 
 """
-`const BASE = Union{MA,MO,SY,DT}`\n
+`const BASE = Union{MA, MO, SY, DT}`\n
 Concrete base type union for parametric abstract types.
 """
 const BASE = Union{MA, MO, SY, DT}
