@@ -19,3 +19,40 @@ end
     @test Set(union2vec(ThermoAmounts.BASE)) ==
         Set(vcat([ subtypes(i) for i in subtypes(BASES) ]...))
 end
+
+#runic: off
+@testset "abstract.test.jl: ThermoAmounts type tree tests                         " begin
+    # All types and parents
+    for (__t, __p) in [
+            # Top-Level
+            (:AbstractTherm, :Any),
+            # BASES branch
+            (:BASES, :AbstractTherm),
+            (:IntBase, :BASES),
+            (:MA, :IntBase),
+            (:MO, :IntBase),
+            (:ExtBase, :BASES),
+            (:SY, :ExtBase),
+            (:DT, :ExtBase),
+            # AMOUNTS branch
+            (:AMOUNTS, :AbstractTherm),
+            (:WholeAmt, :AMOUNTS),
+            (:WProperty, :WholeAmt),
+            (:WInteract, :WholeAmt),
+            (:WUnranked, :WholeAmt),
+            (:BasedAmt, :AMOUNTS),
+            (:BProperty, :BasedAmt),
+            (:BInteract, :BasedAmt),
+            (:BUnranked, :BasedAmt),
+            (:GenerAmt, :AMOUNTS),
+        ]
+        @test typeof(eval(__t)) in (DataType, UnionAll)
+        @test typeof(eval(__p)) in (DataType, UnionAll)
+        __S = supertype(eval(__t))
+        while typeof(__S) == UnionAll
+            __S = __S.body
+        end
+        @test eval(__p) === __S.name.wrapper
+    end
+end
+#runic: on
