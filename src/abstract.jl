@@ -46,13 +46,14 @@ mkNonPAbs(:AbstractTherm, :Any             , "thermodynamic entities"          )
 # runic: on
 
 # BASE branch
-mkNonPAbs(:BASES, :AbstractTherm, "thermodynamic quantity bases")
-mkNonPAbs(:IntBase, :BASES, "intensive bases")
-mkNonPAbs(:MA, :IntBase, "the MAss base")
-mkNonPAbs(:MO, :IntBase, "the MOlar base")
-mkNonPAbs(:ExtBase, :BASES, "non-intensive bases")
-mkNonPAbs(:SY, :ExtBase, "the SYstem (extensive) base")
-mkNonPAbs(:DT, :ExtBase, "the Time Derivative (rate) base")
+# runic: off
+mkNonPAbs(  :BASES      , :AbstractTherm    , "thermodynamic quantity bases"    )
+mkNonPAbs(    :IntBase  , :BASES            , "intensive bases"                 )
+mkNonPAbs(      :MA     , :IntBase          , "the MAss base"                   )
+mkNonPAbs(      :MO     , :IntBase          , "the MOlar base"                  )
+mkNonPAbs(    :ExtBase  , :BASES            , "non-intensive bases"             )
+mkNonPAbs(      :SY     , :ExtBase          , "the SYstem (extensive) base"     )
+mkNonPAbs(      :DT     , :ExtBase          , "the Time Derivative (rate) base" )
 # runic: on
 
 """
