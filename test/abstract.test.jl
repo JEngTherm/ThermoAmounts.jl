@@ -25,26 +25,21 @@ end
     # All types and parents
     for (__t, __p) in [
             # Top-Level
-            (:AbstractTherm, :Any),
+            (:AbstractTherm , :Any              ),
             # BASES branch
-            (:BASES, :AbstractTherm),
-            (:IntBase, :BASES),
-            (:MA, :IntBase),
-            (:MO, :IntBase),
-            (:ExtBase, :BASES),
-            (:SY, :ExtBase),
-            (:DT, :ExtBase),
+            (  :BASES       , :AbstractTherm    ),
+            (    :IntBase   , :BASES            ),
+            (      :RD      , :IntBase          ),
+            (      :MA      , :IntBase          ),
+            (      :MO      , :IntBase          ),
+            (    :ExtBase   , :BASES            ),
+            (      :SY      , :ExtBase          ),
+            (      :DT      , :ExtBase          ),
             # AMOUNTS branch
-            (:AMOUNTS, :AbstractTherm),
-            (:WholeAmt, :AMOUNTS),
-            (:WProperty, :WholeAmt),
-            (:WInteract, :WholeAmt),
-            (:WUnranked, :WholeAmt),
-            (:BasedAmt, :AMOUNTS),
-            (:BProperty, :BasedAmt),
-            (:BInteract, :BasedAmt),
-            (:BUnranked, :BasedAmt),
-            (:GenerAmt, :AMOUNTS),
+            (:AMOUNTS       , :AbstractTherm    ),
+            (  :Property    , :AMOUNTS          ),
+            (  :Interact    , :AMOUNTS          ),
+            (  :Unranked    , :AMOUNTS          ),
         ]
         @test typeof(eval(__t)) in (DataType, UnionAll)
         @test typeof(eval(__p)) in (DataType, UnionAll)

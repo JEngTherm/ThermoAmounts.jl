@@ -11,29 +11,39 @@ function tyArchy(t::Union{DataType, UnionAll})
 end
 
 """
-`function mkNonPAbs(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool=true)`\n
-Declares exactly one new, non-parametric, abstract type `TY <: TP`. Argument `what` is inserted
-in the new type documentation, and `xp` controls whether or not the new abstract type is
-exported (default `true`).
+`function mkNonPAbs(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool=true)`
+
+Factory function for a new non-parametric abstract type
+
+## Parameters
+
+- `TY` New abstract type name
+- `TP` Parent type name for the new abstract type, so that `TY <: TP`
+- `what` Documentation for the new abstract type
+- `xp` Whether to export the new abstract type
 """
-function mkNonPAbs(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool = true)
-    if !(eval(TP) isa DataType)
-        error("Type parent must be a DataType. Got $(string(TP)).")
-    end
+function mkNonPAbs(
+    TY::Symbol,
+    TP::Symbol,
+    what::AbstractString,
+    xp::Bool = true
+)
+    @assert(eval(TP) isa DataType, "Type parent must be a DataType. Got $(string(TP)).")
     hiStr = tyArchy(eval(TP))
     dcStr = """
-    `abstract type $(TY) <: $(TP) end`\n
-    Abstract supertype for $(what).\n
-    $(xp ? "Exported\n" : "Not exported\n")
-    ## Hierarchy\n
+    `abstract type $(TY) <: $(TP) end`
+
+    Abstract supertype for $(what).
+
+    $(xp ? "Exported" : "Not exported")
+
+    ## Hierarchy
+
     `$(TY) <: $(hiStr)`
     """
     return @eval begin
-        # Abstract type definition
         abstract type $TY <: $TP end
-        # Type documentation
         @doc $dcStr $TY
-        # Type exporting
         if $(xp)
             export $TY
         end
