@@ -12,43 +12,43 @@ pre_defs = Dict(
     ),
 )
 
-pref_bas = @load_preference(
-    "Bases", default = Dict(
+pref_bas = @load_preference("Bases")
+
+if !(pref_bas isa Dict)
+    pref_bas = Dict(
         "extensive" => pre_defs["bas"]["ex"],
         "intensive" => pre_defs["bas"]["in"],
     )
-)
-
-if !(pref_bas["extensive"] in (repr(i) for i in subtypes(ExtBase)))
-    pref_bas["extensive"] = pre_defs["bas"]["ex"]
+else
+    if !(pref_bas["extensive"] in (repr(i) for i in subtypes(ExtBase)))
+        pref_bas["extensive"] = pre_defs["bas"]["ex"]
+    end
+    if !(pref_bas["intensive"] in (repr(i) for i in subtypes(IntBase)))
+        pref_bas["intensive"] = pre_defs["bas"]["in"]
+    end
 end
 
-if !(pref_bas["intensive"] in (repr(i) for i in subtypes(IntBase)))
-    pref_bas["intensive"] = pre_defs["bas"]["in"]
-end
+pref_fmt = @load_preference("Formatting")
 
-@set_preferences!("Bases" => pref_bas)
-
-pref_fmt = @load_preference(
-    "Formatting", default = Dict(
+if !(pref_fmt isa Dict)
+    pref_fmt = Dict(
         "print-pretty" => pre_defs["fmt"]["pp"],
         "print-precision" => pre_defs["fmt"]["pr"],
         "significant-digits" => pre_defs["fmt"]["sd"],
     )
-)
-
-if !(pref_fmt["print-pretty"] isa Bool)
-    pref_fmt["print-pretty"] = pre_defs["fmt"]["pp"]
+else
+    if !(pref_fmt["print-pretty"] isa Bool)
+        pref_fmt["print-pretty"] = pre_defs["fmt"]["pp"]
+    end
+    if !(pref_fmt["print-precision"] isa Bool)
+        pref_fmt["print-precision"] = pre_defs["fmt"]["pr"]
+    end
+    if !(pref_fmt["significant-digits"] isa Int) && (pref_fmt["significant-digits"] <= 0)
+        pref_fmt["significant-digits"] = pre_defs["fmt"]["sd"]
+    end
 end
 
-if !(pref_fmt["print-precision"] isa Bool)
-    pref_fmt["print-precision"] = pre_defs["fmt"]["pr"]
-end
-
-if !(pref_fmt["significant-digits"] isa Int) && (pref_fmt["significant-digits"] <= 0)
-    pref_fmt["significant-digits"] = pre_defs["fmt"]["sd"]
-end
-
+@set_preferences!("Bases" => pref_bas)
 @set_preferences!("Formatting" => pref_fmt)
 
 """
