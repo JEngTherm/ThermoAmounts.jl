@@ -57,8 +57,9 @@ The internal representation of user-facing package preferences\n
 Exported.
 """
 DEF = Dict(
-    :ib => pref_bas["intensive"],
-    :eb => pref_bas["extensive"],
+    # getglobal(Module, Symbol) hack to instantiate the abstract type from Symbol from String
+    :ib => getglobal(ThermoAmounts, Symbol(pref_bas["intensive"])),
+    :eb => getglobal(ThermoAmounts, Symbol(pref_bas["extensive"])),
     :pp => pref_fmt["print-pretty"],
     :pr => pref_fmt["print-precision"],
     :sd => pref_fmt["significant-digits"],
