@@ -13,6 +13,7 @@ pre_defs = Dict(
 )
 
 pref_bas = @load_preference("Bases")
+@show (16, pref_bas)
 
 if !(pref_bas isa Dict)
     pref_bas = Dict(
@@ -20,10 +21,10 @@ if !(pref_bas isa Dict)
         "intensive" => pre_defs["bas"]["in"],
     )
 else
-    if !(pref_bas["extensive"] in (repr(i) for i in subtypes(ExtBase)))
+    if !("extensive" in keys(pref_bas)) || !(pref_bas["extensive"] in ("SY", "DT"))
         pref_bas["extensive"] = pre_defs["bas"]["ex"]
     end
-    if !(pref_bas["intensive"] in (repr(i) for i in subtypes(IntBase)))
+    if !("intensive" in keys(pref_bas)) || !(pref_bas["intensive"] in ("MA", "MO"))
         pref_bas["intensive"] = pre_defs["bas"]["in"]
     end
 end
@@ -37,13 +38,16 @@ if !(pref_fmt isa Dict)
         "significant-digits" => pre_defs["fmt"]["sd"],
     )
 else
-    if !(pref_fmt["print-pretty"] isa Bool)
+    if !("print-pretty" in keys(pref_fmt)) || !(pref_fmt["print-pretty"] isa Bool)
         pref_fmt["print-pretty"] = pre_defs["fmt"]["pp"]
     end
-    if !(pref_fmt["print-precision"] isa Bool)
+    if !("print-precision" in keys(pref_fmt)) || !(pref_fmt["print-precision"] isa Bool)
         pref_fmt["print-precision"] = pre_defs["fmt"]["pr"]
     end
-    if !(pref_fmt["significant-digits"] isa Int) && (pref_fmt["significant-digits"] <= 0)
+    if !("significant-digits" in keys(pref_fmt)) || begin
+            !(pref_fmt["significant-digits"] isa Int) &&
+                (pref_fmt["significant-digits"] <= 0)
+        end
         pref_fmt["significant-digits"] = pre_defs["fmt"]["sd"]
     end
 end
