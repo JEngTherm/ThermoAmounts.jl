@@ -13,7 +13,6 @@ pre_defs = Dict(
 )
 
 pref_bas = @load_preference("Bases")
-@show (16, pref_bas)
 
 if !(pref_bas isa Dict)
     pref_bas = Dict(

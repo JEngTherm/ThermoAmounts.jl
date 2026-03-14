@@ -51,45 +51,25 @@ function mkNonPAbs(
 end
 
 """
-`function mk2ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, pp::Integer=2,
-xp::Bool=true)`\n
-Declares a new, 2-parameter abstract type. Parent type parameter count is a function of `pp`, so
-that declarations are as follows:\n
-- `TY{_P,_B} <: TP{_P,_B}` for `pp >= 2` (default);
-- `TY{_P,_B<:BASE} <: TP{_P}` for `pp = 1`;
-- `TY{_P<:PREC,_B<:BASE} <: TP` for `pp <= 0`.\n
-Argument `what` is inserted in the new type documentation, and `xp` controls whether or not the
-new abstract type is exported (default `true`).
 """
-function mk2ParAbs(
-        TY::Symbol, TP::Symbol, what::AbstractString,
-        pp::Integer = 2, xp::Bool = true
+function mkNParAbs(
+        TY::Pair{Symbol, <:NamedTuple},
+        TP::Symbol,
+        xp::Bool = true,
+        dry::Bool = false,
     )
-    #if !(eval(TP) isa DataType)
-    #    error("Type parent must be a DataType. Got $(string(TP)).")
-    #end
-    hiStr = tyArchy(eval(TP))
-    ppStr = pp >= 2 ? "{_P, _B}" : pp == 1 ? "{_P}" : ""
-    dcStr = """
-    `abstract type $(TY){_P<:PREC, _B<:BASE} <: $(TP)$(ppStr) end`\n
-    Abstract supertype for $(what).\n
-    $(xp ? "Exported\n" : "Not exported\n")
-    ## Hierarchy\n
-    `$(TY) <: $(hiStr)`
-    """
-    if pp >= 2
-        @eval (abstract type $TY{_P, _B} <: $TP{_P, _B} end)
-    elseif pp == 1
-        @eval (abstract type $TY{_P, _B <: BASE} <: $TP{_P} end)
-    elseif pp <= 0
-        @eval (abstract type $TY{_P <: PREC, _B <: BASE} <: $TP end)
-    end
-    return @eval begin
-        # Type documentation
-        @doc $dcStr $TY
-        # Type exporting
-        if $(xp)
-            export $TY
-        end
+    @assert(
+        any([eval(TP) isa i for i in (DataType, UnionAll)]),
+        "Type parent must be DataType or UnionAll. Got $(typeof(string(TP)))."
+    )
+    stm  = "abstract type $(TY.first){"
+    stm *= join(
+        [ "$(z[1])<:$(z[2])" for z in zip(keys(TY.second), values(TY.second)) ],
+        ", ")
+    stm *= "} <: $(TP) end" # TODO: figure out parent's type syntax {A, B, etc...}
+    if dry
+        println(stm)
+    else
+        eval(Meta.parse(stm))
     end
 end
